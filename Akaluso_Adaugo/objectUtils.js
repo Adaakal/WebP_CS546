@@ -71,3 +71,31 @@ export let objectStats = (arrObjects) => {
 
 
 };
+
+export let nestedObjectsDiff = (obj1, obj2) => {
+    if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+        throw new Error('One or both parameters cannot be null.');
+    }
+
+    const differences = {};
+
+    const comparisons = (obj1, obj2, path = '') => {
+        Object.keys({...obj1, ...obj2 }).forEach(key => {
+            const value1 = obj1[key];
+            const value2 = obj2[key];
+            const newPath = path ? `${path}.${key}` : key;
+
+            if (value1 && typeof value1 === 'object' && value2 && typeof value2 === 'object') {
+                compare(value1, value2, newPath);
+            } else if (value1 !== value2) {
+                differences[newPath] = { from: value1, to: value2 };
+            }
+
+        });
+    };
+
+    comparisons(obj1, obj2);
+
+    return differences;
+
+}

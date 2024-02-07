@@ -5,7 +5,7 @@ import { arrayShift } from './arrayUtils.js';
 import { matrixOne } from './arrayUtils.js';
 import { swapChars } from './stringUtils.js';
 import { longestCommonSubstring, palindromeOrIsogram } from './stringUtils.js';
-import { objectStats } from './objectUtils.js';
+import { objectStats, nestedObjectsDiff } from './objectUtils.js';
 
 // Test cases for arrayPartition
 const arrayToPartition1 = [1, 2, 3, 4, 5]; 
@@ -81,3 +81,18 @@ const arrayOfObjects3 = [ { alpha: 3.5, beta: 7.2, gamma: 4.8 }, { x: 0, y: 0, z
 const statsResult3 = objectStats(arrayOfObjects3); 
 console.log(statsResult3);
 // Expected Result: { mean: 0.056, median: 0, mode: 0, range: 15.2, minimum: -8, maximum: 7.2, count: 9, sum: 0.5 }
+
+// Test cases for nestedObjectsDiff
+const obj1 = { key1: "value1", key2: { nestedKey: "nestedValue", arrayKey: [1, 2, 3], }, }; 
+const obj2 = { key1: "value1", key2: { nestedKey: "differentValue", arrayKey: [1, 2, 4], }, key3: "newKey", }; 
+const differences = nestedObjectsDiff(obj1, obj2); 
+// Example Output:   { key2: { nestedKey: "differentValue", arrayKey: [1, 2, 4], }, key3: "newKey" }
+console.log(differences);
+const obj3 = { a: 1, b: { c: 2, d: [3, 4] }, e: "hello" }; 
+const obj4 = { a: 1, b: { c: 2, d: [3, 5] }, f: "world" }; 
+const differences1 = nestedObjectsDiff(obj1, obj2); // Expected Result: { b: { d: [3, 5] }, e: undefined, f: "world" }
+console.log(differences1);
+const obj5 = { x: { y: { z: 1 } } }; 
+const obj6 = { x: { y: { z: 1 } } }; 
+const differences2 = nestedObjectsDiff(obj3, obj4); // Expected Result: {} // Both objects are identical, so no differences are found.
+console.log(differences2);
