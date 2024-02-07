@@ -11,22 +11,65 @@ If any of those conditions fail, you will throw an error.
 
 */
 // check if param is an array
-const checkIfArray = (arr) => {
+export const checkIfArray = (arr) => {
     if (!(Array.isArray(arr)) || arr.length === 0) {
         throw new Error('Input is not an array or is empty');
     }
  }
 
  // check if param is a function
- const checkIfFunc = (func) => {
+ export const checkIfFunc = (func) => {
     if (typeof func !== 'function') {
         throw new Error('Input is not a function')
     }
  }
-const checkIfParamExists = (param) => {
-    if (param === undefined || param === null) {
-        throw new Error('Parameter doees not exist or is null');
+export const checkIfParamExists = (param) => {
+    if (param === ' ' || param === null) {
+        throw new Error('Parameter does not exist or is null');
     }
 }
 
 // check if adequate number of params
+export const checkIfParamCount = (n) => {
+    if (!n) {
+        throw new Error('Parameter count is not sufficient.')
+    }
+}
+
+// check if x is a number
+export const checkIfNumber = (x) => {
+    if (typeof x !== 'number') {
+        throw new Error('Input is not a number!');
+    }
+}
+
+// check if number is a whole number
+export const checkIfWholeNumber = (x) => {
+    if (x % 1 !== 0) {
+        throw new Error('Input is not a whole number!');
+    }
+}
+
+// check the matrix arg exists and is an array
+export const checkIfMatrix = (matrix) => {
+    if(!Array.isArray(matrix) || matrix.some(row => !Array.isArray(row) || row.length !== matrix[0].length || row.some(element => typeof element !== 'number'))) {
+        throw new Error('Input is not a matrix!')
+    }
+
+}
+
+// check if string is a string
+export const checkIfString = (str) => {
+    if (typeof str !== 'string') {
+        throw new Error('Input is not string.');
+    }
+ }
+
+ // check if length of string is x
+ export const checkIfStringLength = (str, x) => {
+    if (str.length !== x) {
+        throw new Error('String length is not equal to ' + x);
+    }
+ }
+
+ 
