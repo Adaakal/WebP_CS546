@@ -72,4 +72,10 @@ export const checkIfString = (str) => {
     }
  }
 
+ export const checkIfElementCount = (arr, elemCount) => {
+    if (arr.length !== elemCount) {
+        throw new Error(`Array length 'is not' equal to ${elemCount}`)
+    }
+ }
+
  

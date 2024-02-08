@@ -1,6 +1,6 @@
 /** Todo: Implement the functions below and then export them using the ES6 exports syntax. */
 
-import { checkIfParamCount, checkIfParamExists, checkIfString, checkIfStringLength } from "./helpers.js";
+import { checkIfElementCount, checkIfParamCount, checkIfParamExists, checkIfString, checkIfStringLength } from "./helpers.js";
 
 export let swapChars = (string1, string2) => {
     let minStrLen = 4;
@@ -41,7 +41,7 @@ export let longestCommonSubstring = (str1, str2) => {
     if (trimmedStr1.length < minStrLen || trimmedStr2.length < minStrLen) {
         throw new Error('String length is less than 5 characters.');
     }
-    // What's the difference between empty strings and strings with spaces?
+    
     if (trimmedStr1 === " " || trimmedStr2 === " ") {
         throw new Error('String length is less than 5 characters.');
     }
@@ -63,6 +63,7 @@ export let longestCommonSubstring = (str1, str2) => {
 
 export let palindromeOrIsogram = (arrStrings) => {
     checkIfParamCount(1);
+    checkIfElementCount(arrStrings, 3);
     checkIfParamExists(arrStrings);
     let trimmedArrStrings = arrStrings.map(str => str.trim());
 
@@ -89,6 +90,6 @@ export let palindromeOrIsogram = (arrStrings) => {
         }
     });
 
-    return resultObj;
+    return JSON.stringify(resultObj);
 
 };

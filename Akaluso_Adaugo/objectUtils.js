@@ -1,24 +1,10 @@
 import { checkIfParamCount, checkIfParamExists, checkIfString, checkIfStringLength } from "./helpers.js";
 
 export let objectStats = (arrObjects) => {
-    /** You must check:
 
- • That the input parameter arrObjects exists and is of proper type (an array)
 
-• That each element in the array is an object
-
-• That each object in the array is not empty and has at least 1 key/value pair
-
-• Each object value for each key is a number (can be positive, negative, decimal, zero) and Decimal numbers should be rounded to a maximum of three decimal places.
-
- */
-
-    arrObjects.forEach((obj) => {
-        // checkIfParamExists(obj);
-        // checkIfString(obj);
-        // checkIfStringLength(obj);
-        // checkIfParamCount(obj);
-        // checkIfNumber(obj);
+    arrObjects.forEach((obj, index) => {
+    
 
         if (Object.keys(obj).length === 0) {
             throw new Error('Object is empty');
@@ -28,6 +14,10 @@ export let objectStats = (arrObjects) => {
         }
         if (Object.values(obj).some(value => typeof value !== 'number')) {
             throw new Error('Object value is not a number');
+        }
+        // If any element in the array is not an object, throw an error
+        if (typeof obj !== 'object' || obj === null || Object.getPrototypeOf(obj) !== Object.prototype) {
+            throw new Error(`Object at index ${index} is not an object.`);
         }
 
     });
@@ -43,8 +33,8 @@ export let objectStats = (arrObjects) => {
     const mean = sum / count;
     const median = count % 2 === 0 ? (numVals[count / 2 - 1] + numVals[count / 2]) / 2 : numVals[Math.floor(count / 2)];
     const range = numVals[count - 1] - numVals[0];
-    const min = numVals[0];
-    const max = numVals[count - 1];
+    const minimun = numVals[0];
+    const maximum = numVals[count - 1];
 
     // Calculating mode
     const frequency = numVals.reduce((acc, val) => {
@@ -58,29 +48,28 @@ export let objectStats = (arrObjects) => {
     function roundThreeDecimalPoints(num) {
         return parseFloat(num.toFixed(3));
     }
-    // roundThreeDecimalPoints(mean);
-    // roundThreeDecimalPoints(median);
-    // roundThreeDecimalPoints(mode);
-    // roundThreeDecimalPoints(range);
-    // roundThreeDecimalPoints(min);
-    // roundThreeDecimalPoints(max);
 
 
-    return { mean: roundThreeDecimalPoints(mean), median: roundThreeDecimalPoints(median), mode: endMode, range: roundThreeDecimalPoints(range), min: roundThreeDecimalPoints(min), max: roundThreeDecimalPoints(max), count, sum };
+    return JSON.stringify({ mean: roundThreeDecimalPoints(mean), median: roundThreeDecimalPoints(median), mode: endMode, range: roundThreeDecimalPoints(range), minimun: roundThreeDecimalPoints(minimun), maximum: roundThreeDecimalPoints(maximum), count, sum });
 
 
 
 };
 
 export let nestedObjectsDiff = (obj1, obj2) => {
-    if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
-        throw new Error('One or both parameters cannot be null.');
+
+
+    if (obj1 === null || obj2 === null || typeof obj1 !== 'object' || typeof obj2 !== 'object' || Array.isArray(obj1) || Array.isArray(obj2) || Object.getPrototypeOf(obj1) !== Object.prototype || Object.getPrototypeOf(obj2) !== Object.prototype) {
+        throw new Error('One or both parameters cannot be null or one or both parameters must be of type Object.');
+    }
+    if (Object.keys(obj1).length === 0 || Object.keys(obj2).length === 0) {
+        throw new Error('One or both objects are empty.');
     }
 
     const differences = {};
 
     const comparisons = (obj1, obj2, path = '') => {
-        Object.keys({...obj1, ...obj2 }).forEach(key => {
+        Object.keys({ ...obj1, ...obj2 }).forEach(key => {
             const value1 = obj1[key];
             const value2 = obj2[key];
             const newPath = path ? `${path}.${key}` : key;
@@ -96,7 +85,7 @@ export let nestedObjectsDiff = (obj1, obj2) => {
 
     comparisons(obj1, obj2);
 
-    return differences;
+    return JSON.stringify(differences);
 
 };
 
@@ -107,11 +96,11 @@ export let mergeAndSumValues = (...args) => {
             throw new Error('One or more parameters are not objects.');
         }
         if (Object.keys(obj).length === 0) {
-            throw new Error('Object is empty'); 
+            throw new Error('Object is empty');
         }
-        
 
-        
+
+
 
         Object.entries(obj).forEach(([key, value]) => {
             const numVal = typeof value === 'string' ? parseFloat(value) : value;
@@ -122,9 +111,9 @@ export let mergeAndSumValues = (...args) => {
 
             resultObj[key] = (resultObj[key] || 0) + numVal;
         });
-    
 
-    });    
+
+    });
 
     return JSON.stringify(resultObj);
 

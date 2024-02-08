@@ -1,15 +1,12 @@
 /** Todo: Implement the functions below and then export them using the ES6 exports syntax. */
-import { checkIfArray, checkIfFunc, checkIfParamExists, checkIfParamCount, checkIfNumber, checkIfWholeNumber, checkIfMatrix } from './helpers.js';
+import { checkIfArray, checkIfFunc, checkIfParamExists, checkIfParamCount, checkIfNumber, checkIfWholeNumber, checkIfMatrix, checkIfElementCount } from './helpers.js';
 export let arrayPartition = (arrayToPartition, partitionFunc) => {
     let subArr1 = [];
     let subArr2 = [];
-    // let resultArr = [];
-
-    /** for each currelement in arrtoPart, if arraytopart.partifunc === true, then push 
-    * currelement to subarr1 else push cerrelement to subarr2.
-    */
+   
     checkIfParamExists(partitionFunc);
     checkIfParamCount(partitionFunc, 1);
+    checkIfElementCount(arrayToPartition, 2);
     checkIfArray(arrayToPartition);
     checkIfFunc(partitionFunc);
     arrayToPartition.forEach((elem) => {
@@ -19,17 +16,16 @@ export let arrayPartition = (arrayToPartition, partitionFunc) => {
             subArr2.push(elem);
         }
     });
-    // resultArr.push(subArr1, subArr2);
+   
     return JSON.stringify([subArr1, subArr2]);
 }; 
 
 export let arrayShift = (arr, n) => {
     checkIfArray(arr);
     checkIfParamExists(n);
-    //checkIfParamCount(2);
+    checkIfElementCount(arr, 2);
     checkIfWholeNumber(n);
 
-    
     if (n === 0) {
         return arr;
     }
@@ -47,8 +43,7 @@ export let arrayShift = (arr, n) => {
 export let matrixOne = (matrix) => {
     checkIfMatrix(matrix);
     checkIfArray(matrix);
-
-    // The Set object lets you store unique values of any type, whether primitive values(str, num, bigint, bool, undef, sym, null) or object references.
+    checkIfParamExists(matrix);
 
     let rows = new Set(); 
     let cols = new Set();
