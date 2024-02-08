@@ -30,11 +30,11 @@ export const checkIfParamExists = (param) => {
 }
 
 // check if adequate number of params
-export const checkIfParamCount = (n) => {
-    if (!n) {
+export const checkIfParamCount = (func, n) => {
+    if (func.length !== n) {
         throw new Error('Parameter count is not sufficient.')
     }
-}
+};
 
 // check if x is a number
 export const checkIfNumber = (x) => {
@@ -53,7 +53,7 @@ export const checkIfWholeNumber = (x) => {
 // check the matrix arg exists and is an array
 export const checkIfMatrix = (matrix) => {
     if(!Array.isArray(matrix) || matrix.some(row => !Array.isArray(row) || row.length !== matrix[0].length || row.some(element => typeof element !== 'number'))) {
-        throw new Error('Input is not a matrix!')
+        throw new Error('Input is not a matrix! or has different row lengths or contains non-numeric elements.')
     }
 
 }

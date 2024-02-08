@@ -9,6 +9,7 @@ export let arrayPartition = (arrayToPartition, partitionFunc) => {
     * currelement to subarr1 else push cerrelement to subarr2.
     */
     checkIfParamExists(partitionFunc);
+    checkIfParamCount(partitionFunc, 1);
     checkIfArray(arrayToPartition);
     checkIfFunc(partitionFunc);
     arrayToPartition.forEach((elem) => {
@@ -25,7 +26,7 @@ export let arrayPartition = (arrayToPartition, partitionFunc) => {
 export let arrayShift = (arr, n) => {
     checkIfArray(arr);
     checkIfParamExists(n);
-    checkIfParamCount(2);
+    //checkIfParamCount(2);
     checkIfWholeNumber(n);
 
     

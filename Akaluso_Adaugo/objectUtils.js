@@ -86,7 +86,7 @@ export let nestedObjectsDiff = (obj1, obj2) => {
             const newPath = path ? `${path}.${key}` : key;
 
             if (value1 && typeof value1 === 'object' && value2 && typeof value2 === 'object') {
-                compare(value1, value2, newPath);
+                comparisons(value1, value2, newPath);
             } else if (value1 !== value2) {
                 differences[newPath] = { from: value1, to: value2 };
             }
@@ -97,5 +97,35 @@ export let nestedObjectsDiff = (obj1, obj2) => {
     comparisons(obj1, obj2);
 
     return differences;
+
+};
+
+export let mergeAndSumValues = (...args) => {
+    const resultObj = {};
+    args.forEach(obj => {
+        if (typeof obj !== 'object' || obj === null) {
+            throw new Error('One or more parameters are not objects.');
+        }
+        if (Object.keys(obj).length === 0) {
+            throw new Error('Object is empty'); 
+        }
+        
+
+        
+
+        Object.entries(obj).forEach(([key, value]) => {
+            const numVal = typeof value === 'string' ? parseFloat(value) : value;
+
+            if (isNaN(numVal)) {
+                throw new Error(`Value given as key '${key}' isnt a number nor a str that can be representing a number.`);
+            }
+
+            resultObj[key] = (resultObj[key] || 0) + numVal;
+        });
+    
+
+    });    
+
+    return JSON.stringify(resultObj);
 
 }
