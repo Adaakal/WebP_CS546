@@ -3,13 +3,20 @@
 
 //you must use axios to get the data
 import axios from 'axios';
+import { fetchAuthorsData, fetchBooksData } from "./helpers.js";
 
-const getAuthorById = async (id) => {
+
+// async function fetchAuthorsData() {
+//     const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
+//     return authors;
+// }
+
+export const getAuthorById = async (id) => {
     if (!id || typeof id !== 'string' || !id.trim()) {
         throw new Error("Invalid ID: ID must be a non-empty string.");
     }
 
-    const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
+    const authors = await fetchAuthorsData();
     const author = authors.find((author) => author.id === id.trim());
 
     if (!author) {
@@ -17,30 +24,30 @@ const getAuthorById = async (id) => {
     }
     return author;
 };
-export { getAuthorById };
 
-const searchAuthorsByAge = async (age) => {
+
+export const searchAuthorsByAge = async (age) => {
     if (typeof age !== 'number' || age < 1 || age > 100 || !Number.isInteger(age)) {
         throw new Error("Invalid age: Age must be an integer between 1 and 100.");
-    } 
+    }
 
-    const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
+    const authors = await fetchAuthorsData();
     const currentYear = new Date().getFullYear();
-    const eligibleAuthors = authors.filter((author) => {
+
+    return authors.filter(author => {
         const birthYear = new Date(author.date_of_birth).getFullYear();
         return currentYear - birthYear >= age;
     }).map(author => `${author.first_name} ${author.last_name}`);
 
-    return eligibleAuthors;
 };
 
-const getBooksByState = async (state) => {
+export const getBooksByState = async (state) => {
     if (typeof state !== 'string' || state.trim().length !== 2) {
         throw new Error("Invalid state: State must be a 2-character string.");
     }
 
-    const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
-    const { data: books } = await axios.get('https://gist.githubusercontent.com/graffixnyc/3381b3ba73c249bfcab1e44d836acb48/raw/e14678cd750a4c4a93614a33a840607dd83fdacc/books.json');
+    const authors = await fetchAuthorsData();
+    const books = await fetchBooksData();
     const stateUpper = state.toUpperCase().trim();
     const bookTitles = [];
 
@@ -58,7 +65,7 @@ const getBooksByState = async (state) => {
     return bookTitles;
 };
 
-const searchAuthorsByHometown = async (town, state) => {
+export const searchAuthorsByHometown = async (town, state) => {
     if (!town || typeof town !== 'string' || !town.trim()) {
         throw new Error("Invalid town: Town must be a non-empty string.");
     }
@@ -67,19 +74,28 @@ const searchAuthorsByHometown = async (town, state) => {
         throw new Error("Invalid state: State must be a 2-character string.");
     }
 
-    const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
-    const authorsFromHometown = authors.filter(author => 
+    const authors = await fetchAuthorsData();
+    return authorsFromHometown = authors.filter(author =>
         author.HometownCity.toLowerCase() === normalizedTown &&
         author.HometownState.toUppperCase() === normalizedState).map(author => `${author.first_name} ${author.last_name}`);
-        
-    return authorsFromHometown;
+
 };
 
-const getAuthorBooks = async (authorid) => {
+export const getAuthorBooks = async (authorid) => {
     if (!authorid || typeof authorid !== 'string' || !authorid.trim()) {
         throw new Error("Invalid author ID: Author ID must be a non-empty string.");
     }
 
-    const { data: authors } = await axios.get('https://gist.githubusercontent.com/graffixnyc/a086a55e04f25e538b5d52a095fe4467/raw/e9f835e9a5439a647a24fa272fcb8f5a2b94dece/authors.json');
-    const { data: books } = await axios.get('https://gist.githubusercontent.com/graffixnyc/3381b3ba73c249bfcab1e44d836acb48/raw/e14678cd750a4c4a93614a33a840607dd83fdacc/books.json');
- };
+    const authors = await fetchAuthorsData();
+    const author = authors.find(author => author.id === authorid.trim());
+    if (!author) {
+        throw new Error("Author not found.");
+    }
+
+    const booksData = await import('./books.js');
+    return await Promise.all(author.books.map(async (bookId) => {
+        const book = await booksData.getBookById(bookId);
+        return book.title;
+    }));
+
+};
